@@ -42,9 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 label: 'Celsius Degrees',
                 data: temps,
                 borderColor: gradient,
+                pointBackgroundColor: gradient,
                 borderWidth: 2,
                 tension: 0.4,
-                pointRadius: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
             }],
         },
         options: {
@@ -52,9 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             maintainAspectRatio: false,
             layout: {
                 padding: {
-                    // Dịch điểm đầu tiên sang phải 45px
                     left: HALF_ITEM + 20,
-                    // Dịch điểm cuối cùng sang trái 49px (45px nửa item + 4px padding-right của ul)
                     right: HALF_ITEM + 16
                 }
             },
