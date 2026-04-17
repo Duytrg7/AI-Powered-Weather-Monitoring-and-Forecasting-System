@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scales: {
                 x: {
                     display: false,
+                    offset: true,
                     grid: {
                         drawOnChartArea: false,
                     },
@@ -69,6 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
             animation: {
                 duration: 750,
             },
+            layout: {
+                // Thêm một chút padding 2 bên nếu vẫn thấy biểu đồ hơi sát mép
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            }
         },
     });
 });

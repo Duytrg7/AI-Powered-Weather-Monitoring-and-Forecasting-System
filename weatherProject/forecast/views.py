@@ -155,7 +155,7 @@ def predict_future(model, current_value, current_hour):
     value = current_value
     hour = current_hour
 
-    for _ in range(5):
+    for _ in range(24):
         next_value = model.predict(np.array([[value, hour]]))[0]
         predictions.append(next_value)
         value = next_value
@@ -262,17 +262,20 @@ def weather_view(request):
         current_df = pd.DataFrame([current_data])
         rain_prediction = rain_model.predict(current_df)[0]
 
-        future_temp = predict_future(temp_model, actual_temp,     current_hour)
-        future_hum = predict_future(hum_model,  actual_humidity, current_hour)
+        future_temp = predict_future(temp_model, actual_temp, current_hour)
+        future_hum = predict_future(hum_model, actual_humidity, current_hour)
 
         next_hour = (now + timedelta(hours=1)).replace(minute=0,
                                                        second=0, microsecond=0)
-        future_times = [(next_hour + timedelta(hours=i)
-                         ).strftime("%H:00") for i in range(5)]
 
-        time1, time2, time3, time4, time5 = future_times
-        temp1, temp2, temp3, temp4, temp5 = future_temp
-        hum1,  hum2,  hum3,  hum4,  hum5 = future_hum
+        # Tạo list 24 item thay vì 5 biến riêng lẻ
+        forecast_items = []
+        for i in range(24):
+            forecast_items.append({
+                'time': (next_hour + timedelta(hours=i)).strftime("%H:00"),
+                'temp': round(future_temp[i], 1),
+                'hum':  round(future_hum[i], 1),
+            })
 
         context = {
             'using_sensor':    using_sensor,
@@ -294,16 +297,7 @@ def weather_view(request):
             'pressure':   current_weather['pressure'],
             'visibility': current_weather['visibility'],
 
-            'time1': time1, 'time2': time2, 'time3': time3,
-            'time4': time4, 'time5': time5,
-
-            'temp1': f"{round(temp1, 1)}", 'temp2': f"{round(temp2, 1)}",
-            'temp3': f"{round(temp3, 1)}", 'temp4': f"{round(temp4, 1)}",
-            'temp5': f"{round(temp5, 1)}",
-
-            'hum1': f"{round(hum1, 1)}", 'hum2': f"{round(hum2, 1)}",
-            'hum3': f"{round(hum3, 1)}", 'hum4': f"{round(hum4, 1)}",
-            'hum5': f"{round(hum5, 1)}",
+            'forecast_items': forecast_items,
         }
         return render(request, 'weather.html', context)
     return render(request, 'weather.html')
