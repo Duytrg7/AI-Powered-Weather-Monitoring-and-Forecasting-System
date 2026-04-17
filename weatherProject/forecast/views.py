@@ -268,11 +268,23 @@ def weather_view(request):
         next_hour = (now + timedelta(hours=1)).replace(minute=0,
                                                        second=0, microsecond=0)
 
-        # Tạo list 24 item thay vì 5 biến riêng lẻ
         forecast_items = []
         for i in range(24):
+            item_time = next_hour + timedelta(hours=i)
+
+            # Logic gán Ngày thay cho Giờ: Nếu là item đầu tiên (i==0) HOẶC là 0h sáng
+            if i == 0 or item_time.hour == 0:
+                # In ra dạng Ngày/Tháng (VD: 18/04)
+                time_str = item_time.strftime("%d/%m")
+                is_date = True
+            else:
+                # Các giờ khác vẫn in bình thường
+                time_str = item_time.strftime("%H:00")
+                is_date = False
+
             forecast_items.append({
-                'time': (next_hour + timedelta(hours=i)).strftime("%H:00"),
+                'time': time_str,
+                'is_date': is_date,  # Truyền thêm cờ này ra HTML để đổi màu
                 'temp': round(future_temp[i], 1),
                 'hum':  round(future_hum[i], 1),
             })

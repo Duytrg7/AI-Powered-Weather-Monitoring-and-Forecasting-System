@@ -356,7 +356,7 @@ main.clear {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0 42px 0 42px;
+    padding: 65px 42px 0 42px;
 
     background-image: url('../img/main-blur.png');
     background-size: cover;
@@ -481,6 +481,11 @@ main.clear {
     font-size: 14px;
     margin-bottom: 4;
     margin-left: 9px;
+}
+
+.forecast-time.is-date {
+    font-weight: normal;
+    color: #fff;
 }
 
 .forecastWindText {

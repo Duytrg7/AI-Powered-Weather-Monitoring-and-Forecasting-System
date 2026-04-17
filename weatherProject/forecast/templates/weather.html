@@ -124,7 +124,8 @@
                         <ul class="forecast">
                             {% for item in forecast_items %}
                             <li class="forecast-item">
-                                <p class="forecast-time">{{ item.time }}</p>
+                                <p class="forecast-time {% if item.is_date %}is-date{% endif %}">{{ item.time }}</p>
+
                                 <p class="forecast-temperature">
                                     &nbsp;<span class="forecast-temperatureValue">{{ item.temp }}</span>°C
                                 </p>
