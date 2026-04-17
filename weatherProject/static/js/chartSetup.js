@@ -1,16 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
     const chartElement = document.getElementById('chart');
     if (!chartElement) {
-        console.error('Canvas Element nt found.');
+        console.error('Canvas Element not found.');
         return;
     }
+
+    const forecastItems = document.querySelectorAll('.forecast-item');
+    const forecastUl = document.querySelector('.forecast'); // Lấy trực tiếp thẻ ul chứa danh sách
+
+    if (forecastItems.length === 0 || !forecastUl) {
+        console.error('Không tìm thấy danh sách dự báo.');
+        return;
+    }
+
+    // --- BƯỚC 1: FIX KÍCH THƯỚC CANVAS ---
+    // Lấy chiều rộng thực tế mà trình duyệt đã render cho thẻ ul
+    const totalWidth = forecastUl.scrollWidth;
+
+    // Ép cứng kích thước cho thẻ canvas (cả thuộc tính attribute lẫn CSS)
+    chartElement.width = totalWidth;
+    chartElement.style.width = totalWidth + 'px';
+    chartElement.height = 45;
+    chartElement.style.height = '45px';
+    // -------------------------------------
 
     const ctx = chartElement.getContext('2d');
     const gradient = ctx.createLinearGradient(0, -10, 0, 100);
     gradient.addColorStop(0, 'rgba(250, 0, 0, 1)');
     gradient.addColorStop(1, 'rgba(136, 255, 0, 1)');
-
-    const forecastItems = document.querySelectorAll('.forecast-item');
 
     const temps = [];
     const times = [];
@@ -25,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             temps.push(temp);
         }
     });
-    // Ensure all values are valid before using them
+
     if (temps.length === 0 || times.length === 0) {
         console.error('Temp or time values are missing.');
         return;
@@ -47,6 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
         },
         options: {
+            // --- BƯỚC 2: TẮT RESPONSIVE CỦA CHART.JS ---
+            responsive: false,
+            maintainAspectRatio: false,
+            // -------------------------------------------
             plugins: {
                 legend: {
                     display: false,
@@ -71,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 duration: 750,
             },
             layout: {
-                // Thêm một chút padding 2 bên nếu vẫn thấy biểu đồ hơi sát mép
                 padding: {
                     left: 0,
                     right: 0
