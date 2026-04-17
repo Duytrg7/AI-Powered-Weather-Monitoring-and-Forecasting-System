@@ -1,28 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const chartElement = document.getElementById('chart');
-    if (!chartElement) {
-        console.error('Canvas Element not found.');
-        return;
-    }
-
+    const forecastUl = document.querySelector('.forecast');
     const forecastItems = document.querySelectorAll('.forecast-item');
-    const forecastUl = document.querySelector('.forecast'); // Lấy trực tiếp thẻ ul chứa danh sách
 
-    if (forecastItems.length === 0 || !forecastUl) {
-        console.error('Không tìm thấy danh sách dự báo.');
-        return;
-    }
+    if (!chartElement || !forecastUl || forecastItems.length === 0) return;
 
-    // --- BƯỚC 1: FIX KÍCH THƯỚC CANVAS ---
-    // Lấy chiều rộng thực tế mà trình duyệt đã render cho thẻ ul
+    // 1. ÉP KÍCH THƯỚC CANVAS ĐÚNG BẰNG ĐỘ DÀI CỦA KHUNG CHỨA (UL)
     const totalWidth = forecastUl.scrollWidth;
-
-    // Ép cứng kích thước cho thẻ canvas (cả thuộc tính attribute lẫn CSS)
     chartElement.width = totalWidth;
     chartElement.style.width = totalWidth + 'px';
     chartElement.height = 45;
     chartElement.style.height = '45px';
-    // -------------------------------------
 
     const ctx = chartElement.getContext('2d');
     const gradient = ctx.createLinearGradient(0, -10, 0, 100);
@@ -35,68 +23,57 @@ document.addEventListener('DOMContentLoaded', () => {
     forecastItems.forEach(item => {
         const time = item.querySelector('.forecast-time').textContent;
         const temp = item.querySelector('.forecast-temperatureValue').textContent;
-        const hum = item.querySelector('.forecast-humidityValue').textContent;
 
-        if (time && temp && hum) {
+        if (time && temp) {
             times.push(time);
             temps.push(temp);
         }
     });
 
-    if (temps.length === 0 || times.length === 0) {
-        console.error('Temp or time values are missing.');
-        return;
-    }
+    // 2. TÍNH TOÁN ĐỘ LỆCH ĐỂ DỊCH BIỂU ĐỒ (Dựa trên ý tưởng của bạn)
+    const ITEM_WIDTH = 90; // Trùng với min-width: 90px trong CSS
+    const HALF_ITEM = ITEM_WIDTH / 2; // 45px - Khoảng cách từ lề đến tâm điểm
 
     new Chart(ctx, {
         type: 'line',
         data: {
             labels: times,
-            datasets: [
-                {
-                    label: 'Celsius Degrees',
-                    data: temps,
-                    borderColor: gradient,
-                    borderWidth: 2,
-                    tension: 0.4,
-                    pointRadius: 2,
-                },
-            ],
+            datasets: [{
+                label: 'Celsius Degrees',
+                data: temps,
+                borderColor: gradient,
+                borderWidth: 2,
+                tension: 0.4,
+                pointRadius: 2,
+            }],
         },
         options: {
-            // --- BƯỚC 2: TẮT RESPONSIVE CỦA CHART.JS ---
             responsive: false,
             maintainAspectRatio: false,
-            // -------------------------------------------
+            layout: {
+                padding: {
+                    // Dịch điểm đầu tiên sang phải 45px
+                    left: HALF_ITEM + 20,
+                    // Dịch điểm cuối cùng sang trái 49px (45px nửa item + 4px padding-right của ul)
+                    right: HALF_ITEM + 16
+                }
+            },
             plugins: {
-                legend: {
-                    display: false,
-                },
+                legend: { display: false },
             },
             scales: {
                 x: {
                     display: false,
-                    offset: true,
-                    grid: {
-                        drawOnChartArea: false,
-                    },
+                    // QUAN TRỌNG: Phải set offset là false để vô hiệu hóa khoảng cách thừa mặc định của Chart.js
+                    offset: false,
+                    grid: { drawOnChartArea: false },
                 },
                 y: {
                     display: false,
-                    grid: {
-                        drawOnChartArea: false,
-                    },
+                    grid: { drawOnChartArea: false },
                 },
             },
-            animation: {
-                duration: 750,
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0
-                }
-            }
+            animation: { duration: 750 },
         },
     });
 });
