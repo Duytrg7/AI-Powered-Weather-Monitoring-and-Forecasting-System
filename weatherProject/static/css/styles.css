@@ -147,9 +147,18 @@ main.clear {
     flex: 1;
     margin: 0 10px;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 12px;
+    font-size: 13px;
+
+    position: relative;
+    top: 8px;
 }
 
+.weather-icon {
+    position: relative;
+    top: 4px;
+}
+
+/* 1. Trạng thái bình thường của nút (Khung hộp giữ nguyên, không scale) */
 .search-button {
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -160,27 +169,41 @@ main.clear {
     display: flex;
     align-items: center;
     justify-content: center;
-
     transition: all 0.3s ease;
 }
 
+/* 2. Khi rê chuột vào hộp: Chỉ đổi màu nền, đổ bóng và sáng viền */
 .search-button:hover {
     background-color: rgba(255, 255, 255, 0.25);
-    transform: scale(1.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-.search-button:active {
-    transform: scale(0.95);
-}
-
+/* 3. Khi nút bị vô hiệu hóa (disabled): Khóa mọi tương tác chuột */
 .search-button:disabled {
     cursor: not-allowed;
     opacity: 0.4;
     pointer-events: none;
-    transform: scale(1);
+    /* Khóa đứng im, không cho click hay hover */
     box-shadow: none;
+}
+
+/* ==============================================
+   4. HIỆU ỨNG RIÊNG CHO ICON BÊN TRONG HỘP
+   ============================================== */
+.search-button i {
+    transition: transform 0.3s ease;
+    /* Hiệu ứng mượt cho riêng icon */
+}
+
+/* Khi rê chuột vào hộp -> icon bên trong to lên một chút */
+.search-button:hover i {
+    transform: scale(1.2);
+}
+
+/* Khi click chuột xuống -> icon lún xuống */
+.search-button:active i {
+    transform: scale(0.9);
 }
 
 /* BADGE NGUỒN DỮ LIỆU (DHT11 / OpenWeather) */

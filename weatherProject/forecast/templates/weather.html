@@ -149,12 +149,12 @@
         document.getElementById('get-location-btn').addEventListener('click', function () {
             const btn = this;
 
-            btn.innerHTML = '<div style="width:25px;height:25px;color:white;"><i class="bi bi-arrow-repeat"></i></div>';
+            btn.innerHTML = '<i class="bi bi-arrow-repeat" style="font-size: 0.9rem; color: white;"></i>';
             btn.disabled = true;
 
             if (!navigator.geolocation) {
                 alert('Trình duyệt của bạn không hỗ trợ Geolocation.');
-                btn.innerHTML = '<div style="width:25px;height:25px;color:white;"><i class="bi bi-geo-alt-fill"></i></div>';
+                btn.innerHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 0.9rem; color: white;"></i>';
                 btn.disabled = false;
                 return;
             }
@@ -174,7 +174,7 @@
                         3: 'Quá thời gian lấy vị trí.'
                     };
                     alert(messages[error.code] || 'Lỗi không xác định.');
-                    btn.innerHTML = '<div style="width:25px;height:25px;color:white;"><i class="bi bi-geo-alt-fill"></i></div>';
+                    btn.innerHTML = '<i class="bi bi-geo-alt-fill" style="font-size: 0.9rem; color: white;"></i>';
                     btn.disabled = false;
                 },
                 { timeout: 10000 }  // timeout 10 giây
