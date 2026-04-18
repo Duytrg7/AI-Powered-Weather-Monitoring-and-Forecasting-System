@@ -300,12 +300,12 @@ main.clear {
 
 /* Day Stats */
 .day-stats {
-    width: 100;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    margin-top: 100px;
+    margin-top: 92px;
     margin-bottom: auto;
     z-index: 2;
 }
@@ -476,13 +476,37 @@ main.clear {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
 
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
+/* =========================================
+   STYLE THANH CUỘN NGANG CHO KHU VỰC DỰ BÁO
+   ========================================= */
+
+/* Kích thước (độ dày) của thanh cuộn */
 .forecast-scroll-area::-webkit-scrollbar {
-    display: none;
+    height: 6px;
 }
+
+/* Nền của thanh cuộn (Track) - Để trong suốt */
+.forecast-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Phần tay cầm thanh cuộn (Thumb) */
+.forecast-scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.forecast-scroll-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+/* .forecast-scroll-area::-webkit-scrollbar {
+    display: none;
+} */
 
 .forecast-content-wrapper {
     width: max-content;
@@ -499,9 +523,9 @@ main.clear {
     margin-top: 0px;
 }
 
-.forecast::-webkit-scrollbar {
+/* .forecast::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .forecast-item {
     flex-shrink: 0;
