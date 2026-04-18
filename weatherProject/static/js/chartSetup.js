@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             layout: {
                 padding: {
                     left: HALF_ITEM + 20,
-                    right: HALF_ITEM + 9,
+                    right: HALF_ITEM + 16,
                 }
             },
             plugins: {

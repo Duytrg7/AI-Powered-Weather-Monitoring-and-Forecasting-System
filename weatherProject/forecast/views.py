@@ -273,7 +273,7 @@ def weather_view(request):
             item_time = next_hour + timedelta(hours=i)
 
             # Logic gán Ngày thay cho Giờ: Nếu là item đầu tiên (i==0) HOẶC là 0h sáng
-            if i == 0 or item_time.hour == 0:
+            if item_time.hour == 0:
                 # In ra dạng Ngày/Tháng (VD: 18/04)
                 time_str = item_time.strftime("%d/%m")
                 is_date = True
