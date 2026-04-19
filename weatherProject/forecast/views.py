@@ -112,7 +112,7 @@ def prepare_data(data):
     data['RainTomorrow'] = le.fit_transform(data['RainTomorrow'])
 
     x = data[['MinTemp', 'MaxTemp', 'WindGustDir', 'WindGustSpeed',
-              'Humidity', 'Pressure', 'Temp', 'Hour']]
+              'Humidity', 'Pressure', 'Temp', 'Hour', 'Month']]
     y = data['RainTomorrow']
 
     return x, y, le
@@ -257,6 +257,7 @@ def weather_view(request):
             'Pressure':      current_weather['pressure'],
             'Temp':          current_weather['current_temp'],
             'Hour':          current_hour,
+            'Month':         now.month,
         }
 
         current_df = pd.DataFrame([current_data])
