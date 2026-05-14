@@ -1,0 +1,19 @@
+# Virtual environment
+.venv/
+Pipfile.lock
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Model files
+*.pkl
+
+# Database
+db.sqlite3
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/

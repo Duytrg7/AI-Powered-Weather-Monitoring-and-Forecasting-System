@@ -1,21 +1,23 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.cache import cache
-import requests
-import pandas as pd
-import numpy as np
-import json
-import joblib
-import os
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.metrics import mean_squared_error
-from datetime import datetime, timedelta
 import pytz
+from datetime import datetime, timedelta
+from sklearn.metrics import mean_squared_error
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+import os
+import joblib
+import json
+import numpy as np
+import pandas as pd
+import requests
+from django.core.cache import cache
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.shortcuts import render
+from dotenv import load_dotenv
+load_dotenv()
 
-API_KEY = '7b0e0d67fb067d164ddd0bc20c1930bd'
+API_KEY = os.environ.get('OPENWEATHER_API_KEY')
 BASE_URL = 'https://api.openweathermap.org/data/2.5/'
 
 # [THAY ĐỔI] Đường dẫn thư mục lưu model .pkl
