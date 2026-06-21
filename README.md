@@ -172,9 +172,9 @@ weather-monitoring-system/
 │   ├── templates/
 │   │   └── weather.html
 │   ├── static/
-│   │   └── css
-│   │       └── styles.css           # Modify UI
-│   │   └── img                      # Background images for web interface
+│   │   ├── css
+│   │   │   └── styles.css           # Modify UI
+│   │   ├── img                      # Background images for web interface
 │   │   └── js                       # Setup chart logic
 │   │       └── chartSetup.js  
 │   └── manage.py
