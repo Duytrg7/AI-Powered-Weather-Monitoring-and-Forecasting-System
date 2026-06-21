@@ -1,81 +1,81 @@
-# Hệ Thống Theo Dõi Và Dự Báo Thời Tiết Bằng AI
+# AI-Powered Weather Monitoring and Forecasting System
 
-**Tiếng Việt** | [English](./README.md)
+[Tiếng Việt](./README.vi.md) | **English**
 
-Hệ thống giám sát thời tiết ứng dụng IoT + AI, xây dựng trên **ESP32** và **DHT11**, kết hợp với backend **Django** chạy các mô hình **Random Forest** để dự báo mưa, nhiệt độ và độ ẩm trong 24 giờ tiếp theo, hiển thị trên web dashboard theo thời gian thực.
-
----
-
-## Tổng Quan
-
-Dự án này thu thập dữ liệu môi trường từ cảm biến vật lý và kết hợp với học máy để không chỉ dừng lại ở giám sát mà còn dự báo:
-- Đọc nhiệt độ và độ ẩm từ cảm biến **DHT11** thông qua **ESP32**
-- Sử dụng **OpenWeather API** làm nguồn dự phòng khi dữ liệu cảm biến không khả dụng hoặc quá hạn
-- Dự báo khả năng mưa ngày mai bằng **Random Forest Classifier**
-- Dự báo nhiệt độ và độ ẩm trong 24 giờ tiếp theo bằng hai mô hình **Random Forest Regressor**
-- Hiển thị thời tiết hiện tại và dự báo 24 giờ trên web dashboard responsive với **Chart.js**
-
-**Công nghệ sử dụng:** ESP32 · DHT11 · Django · scikit-learn (Random Forest) · OpenWeather API · Visual Crossing (dữ liệu lịch sử) · Chart.js · joblib
+An IoT + AI weather monitoring system built on **ESP32** and **DHT11**, combined with a **Django** backend that runs **Random Forest** models to forecast rain, temperature, and humidity for the next 24 hours, displayed on a real-time web dashboard.
 
 ---
 
-## Sơ Đồ Khối Hệ Thống
+## Overview
+
+This project collects environmental data from a physical sensor and combines it with machine learning to go beyond simple monitoring into forecasting:
+- Reads temperature and humidity from a **DHT11** sensor via **ESP32**
+- Falls back to the **OpenWeather API** when sensor data is unavailable or stale
+- Predicts rain for tomorrow using a **Random Forest Classifier**
+- Forecasts temperature and humidity for the next 24 hours using two **Random Forest Regressors**
+- Displays current conditions and 24-hour forecasts on a responsive web dashboard with **Chart.js**
+
+**Tech stack:** ESP32 · DHT11 · Django · scikit-learn (Random Forest) · OpenWeather API · Visual Crossing (historical data) · Chart.js · joblib
+
+---
+
+## System Block Diagram
 
 ```mermaid
 flowchart TB
-    DHT["DHT11\n(Nhiệt độ & Độ ẩm)"] --> ESP32[("ESP32")]
+    DHT["DHT11 Sensor\n(Temperature & Humidity)"] --> ESP32[("ESP32")]
     ESP32 -->|HTTP POST JSON| Django["Django Backend"]
-    Django --> Cache["Cache dữ liệu cảm biến\n(hiệu lực 30 giây)"]
-    Django --> OWM["OpenWeather API\n(nguồn dự phòng)"]
-    Django --> RF["Random Forest Models\nMưa / Nhiệt độ / Độ ẩm"]
+    Django --> Cache["Sensor Data Cache\n(30s validity)"]
+    Django --> OWM["OpenWeather API\n(fallback source)"]
+    Django --> RF["Random Forest Models\nRain / Temp / Humidity"]
     Django --> Web["weather.html\n+ Chart.js"]
 ```
 
-**Các thành phần:**
+**Components:**
 
-| Thành phần | Vai trò |
+| Component | Role |
 |---|---|
-| DHT11 | Đo nhiệt độ và độ ẩm môi trường |
-| ESP32 | Đọc dữ liệu cảm biến, đóng gói JSON, gửi lên backend qua HTTP |
-| Django Backend | Nhận dữ liệu cảm biến, cache lại, gọi OpenWeather API khi cần, chạy mô hình AI, render dashboard |
-| OpenWeather API | Nguồn dữ liệu dự phòng khi dữ liệu cảm biến không khả dụng hoặc quá hạn |
-| Random Forest Models | Dự báo khả năng mưa ngày mai và dự báo nhiệt độ/độ ẩm trong 24 giờ tới |
-| weather.html + Chart.js | Hiển thị thời tiết hiện tại và biểu đồ xu hướng dự báo 24 giờ |
+| DHT11 | Measures ambient temperature and humidity |
+| ESP32 | Reads sensor data, packages it as JSON, sends it to the backend over HTTP |
+| Django Backend | Receives sensor data, caches it, calls OpenWeather API when needed, runs the AI models, renders the dashboard |
+| OpenWeather API | Fallback data source when sensor data is unavailable or expired |
+| Random Forest Models | Predict rain for tomorrow and forecast temperature/humidity for the next 24 hours |
+| weather.html + Chart.js | Displays current conditions and 24-hour forecast trend charts |
 
 ---
 
-## Hình Ảnh Phần Cứng
+## Hardware Image
 
 <p align="center">
-  <img src="images/hardware_overview.png" alt="Sơ đồ đi dây ESP32 và DHT11" width="600">
+  <img src="images/hardware_overview.png" alt="ESP32 and DHT11 Wiring" width="600">
 </p>
 
-Sơ đồ đi dây ESP32 và DHT11.
+ESP32 and DHT11 wiring overview.
 
 ---
 
 ## Web Dashboard
 
-<img src="images/web_interface1.png" alt="Dashboard - Nguồn dữ liệu từ cảm biến" width="500">
+<img src="images/web_interface2.png" alt="Dashboard - Sensor Data Source" width="500">
 
-Dashboard hiển thị dữ liệu thời tiết hiện tại lấy từ cảm biến DHT11 thông qua ESP32, kèm dự báo nhiệt độ và độ ẩm trong 24 giờ tiếp theo.
+Dashboard showing current weather data sourced from the DHT11 sensor via ESP32, along with the 24-hour temperature and humidity forecast.
 
-<img src="images/web_interface2.png" alt="Dashboard - Nguồn dữ liệu từ API" width="500">
+<img src="images/web_interface1.png" alt="Dashboard - API Data Source" width="500">
 
-Dashboard chuyển sang dùng OpenWeather API khi dữ liệu cảm biến không khả dụng hoặc quá hạn, đồng thời hiển thị rõ nguồn dữ liệu đang được sử dụng.
+Dashboard falling back to the OpenWeather API when sensor data is unavailable or expired, indicating the active data source to the user.
 
 ---
 
-## Mô Tả Luồng Dữ Liệu
+## Data Flow Description
 
-1. **Đo lường** — ESP32 đọc dữ liệu nhiệt độ và độ ẩm từ cảm biến DHT11.
-2. **Truyền dữ liệu** — ESP32 gửi dữ liệu lên Django bằng HTTP POST với JSON body (`temperature`, `humidity`).
-3. **Lưu cache** — Django lưu dữ liệu cảm biến vào cache kèm thời điểm nhận được.
-4. **Yêu cầu** — Khi người dùng mở dashboard, frontend gửi yêu cầu lấy thời tiết hiện tại cùng vị trí người dùng.
-5. **Kiểm tra hiệu lực** — Django kiểm tra dữ liệu cảm biến trong cache còn trong khoảng thời gian hợp lệ hay không (30 giây).
-6. **Chọn nguồn dữ liệu** — Nếu dữ liệu cache còn hợp lệ, hệ thống dùng dữ liệu từ DHT11; nếu quá hạn hoặc không tồn tại, hệ thống chuyển sang dùng OpenWeather API.
-7. **Dự báo** — Django đưa dữ liệu thời tiết hiện tại vào các mô hình Random Forest để dự báo khả năng mưa ngày mai và nhiệt độ/độ ẩm trong 24 giờ tới.
-8. **Hiển thị** — Kết quả được render ra `weather.html`, Chart.js vẽ biểu đồ xu hướng nhiệt độ và độ ẩm trong 24 giờ trên dashboard.
+1. **Sensing** — ESP32 reads temperature and humidity from the DHT11 sensor.
+2. **Transmission** — ESP32 sends the reading to Django as an HTTP POST request with a JSON body (`temperature`, `humidity`).
+3. **Caching** — Django stores the sensor reading in cache along with the timestamp it was received.
+4. **Request** — When the user opens the dashboard, the frontend requests the current weather and the user's location.
+5. **Validity Check** — Django checks whether the cached sensor data is still within the valid time window (30 seconds).
+6. **Source Selection** — If the cached data is still valid, the system uses the DHT11 reading; if it's stale or missing, the system falls back to the OpenWeather API.
+7. **Forecasting** — Django feeds the current weather data into the Random Forest models to predict tomorrow's rain status and the next 24 hours of temperature and humidity.
+8. **Rendering** — Results are rendered into `weather.html`, and Chart.js draws the 24-hour temperature and humidity trend charts on the dashboard.
 
 ```mermaid
 sequenceDiagram
@@ -87,108 +87,106 @@ sequenceDiagram
     participant RF as Random Forest Models
     participant Web as weather.html (Chart.js)
 
-    DHT->>ESP32: Dữ liệu nhiệt độ & độ ẩm
+    DHT->>ESP32: Temperature & humidity reading
     ESP32->>Django: POST /api/sensor/ (JSON)
-    Django->>Cache: Lưu dữ liệu + thời điểm nhận
+    Django->>Cache: Store reading + timestamp
 
-    Web->>Django: Yêu cầu thời tiết hiện tại + dự báo
-    Django->>Cache: Kiểm tra hiệu lực dữ liệu (30s)
-    alt Dữ liệu cảm biến còn hợp lệ
-        Cache-->>Django: Trả về dữ liệu DHT11
-    else Dữ liệu quá hạn hoặc không có
-        Django->>OWM: Gọi lấy thời tiết hiện tại
-        OWM-->>Django: Dữ liệu thời tiết
+    Web->>Django: Request current weather + forecast
+    Django->>Cache: Check data validity (30s)
+    alt Sensor data valid
+        Cache-->>Django: Return DHT11 reading
+    else Sensor data stale or missing
+        Django->>OWM: Fetch current weather
+        OWM-->>Django: Weather data
     end
-    Django->>RF: Dự báo mưa / nhiệt độ 24h / độ ẩm 24h
-    RF-->>Django: Kết quả dự báo
-    Django-->>Web: Render weather.html + dữ liệu dự báo
-    Web->>Web: Chart.js vẽ biểu đồ xu hướng 24h
+    Django->>RF: Predict rain / 24h temp / 24h humidity
+    RF-->>Django: Forecast results
+    Django-->>Web: Render weather.html + forecast data
+    Web->>Web: Chart.js draws 24h trend charts
 ```
 
 ---
 
-## Mô Hình AI
+## AI Models
 
-Tất cả mô hình được huấn luyện trên khoảng 8.640 dòng dữ liệu lịch sử hourly từ **Visual Crossing**, trong giai đoạn 01/01/2025 đến 26/12/2025. Đặc trưng đầu vào gồm `MinTemp`, `MaxTemp`, `WindGustDir`, `WindGustSpeed`, `Humidity`, `Pressure`, `Temp`, `Hour`, và `Month`.
+All models are trained on roughly 8,640 hourly historical records from **Visual Crossing**, covering Jan 1 – Dec 26, 2025. Input features include `MinTemp`, `MaxTemp`, `WindGustDir`, `WindGustSpeed`, `Humidity`, `Pressure`, `Temp`, `Hour`, and `Month`.
 
-| Mô hình | Loại | Mục đích |
+| Model | Type | Purpose |
 |---|---|---|
-| Dự báo mưa | RandomForestClassifier | Dự báo Rain / No Rain cho ngày mai |
-| Dự báo nhiệt độ | RandomForestRegressor | Dự báo nhiệt độ lặp lại theo từng giờ trong 24 giờ tới |
-| Dự báo độ ẩm | RandomForestRegressor | Dự báo độ ẩm lặp lại theo từng giờ trong 24 giờ tới |
+| Rain Prediction | RandomForestClassifier | Predicts Rain / No Rain for tomorrow |
+| Temperature Forecast | RandomForestRegressor | Iteratively forecasts temperature for the next 24 hours |
+| Humidity Forecast | RandomForestRegressor | Iteratively forecasts humidity for the next 24 hours |
 
-Các mô hình hồi quy dự báo theo kiểu lặp: giá trị dự đoán của giờ trước được dùng làm đầu vào để dự đoán giờ kế tiếp. Mô hình sau khi train được lưu lại bằng `joblib` (file `.pkl`), giúp backend chỉ cần load mô hình khi khởi động thay vì train lại mỗi lần có request.
+The regression models forecast iteratively: each hour's predicted value becomes the input for predicting the next hour. Trained models are persisted with `joblib` (`.pkl` files) so the backend loads them at startup instead of retraining on every request.
 
 ---
 
-## Hiệu Năng
+## Performance
 
-Đo trên hệ thống thực tế đã triển khai:
+Measured on the implemented system:
 
-| Chỉ số | Kết quả |
+| Metric | Result |
 |---|---|
-| Thời gian phản hồi ESP32 → Django | ~0.08 giây |
-| Thời gian gọi OpenWeather API | ~0.41 giây |
-| Thời gian load model (`joblib.load()`) | ~0.15 giây |
-| Thời gian dự báo mưa | ~0.006 giây |
-| Thời gian dự báo nhiệt độ 24 giờ | ~0.09 giây |
-| Thời gian dự báo độ ẩm 24 giờ | ~0.09 giây |
-| Tổng thời gian phản hồi dashboard (`weather_view()`) | ~3.35 giây |
+| ESP32 → Django sensor data response time | ~0.08s |
+| OpenWeather API call | ~0.41s |
+| Model load time (`joblib.load()`) | ~0.15s |
+| Rain prediction | ~0.006s |
+| 24h temperature forecast | ~0.09s |
+| 24h humidity forecast | ~0.09s |
+| Full dashboard request (`weather_view()`) | ~3.35s |
 
 ---
 
-## Tính Năng
+## Features
 
-- Giám sát nhiệt độ và độ ẩm theo thời gian thực qua DHT11 + ESP32
-- Tự động chuyển sang OpenWeather API khi dữ liệu cảm biến không khả dụng hoặc quá hạn
-- Dự báo khả năng mưa ngày mai (Random Forest Classifier)
-- Dự báo nhiệt độ 24 giờ tới (Random Forest Regressor)
-- Dự báo độ ẩm 24 giờ tới (Random Forest Regressor)
-- Web dashboard với biểu đồ xu hướng bằng Chart.js
-- Hiển thị rõ nguồn dữ liệu đang dùng (cảm biến DHT11 hay OpenWeather API)
-- Lưu mô hình bằng joblib — không cần train lại mỗi lần chạy
+- Real-time temperature and humidity monitoring via DHT11 + ESP32
+- Automatic fallback to OpenWeather API when sensor data is unavailable or stale
+- Next-day rain prediction (Random Forest Classifier)
+- 24-hour temperature forecast (Random Forest Regressor)
+- 24-hour humidity forecast (Random Forest Regressor)
+- Web dashboard with Chart.js trend visualization
+- Active data source indicator (DHT11 sensor vs. OpenWeather API)
+- Model persistence via joblib — no retraining needed on every run
 
-## Phần Cứng Sử Dụng
+## Hardware Used
 
 - ESP32 Dev Board
-- Cảm biến nhiệt độ & độ ẩm DHT11
+- DHT11 Temperature & Humidity Sensor
 
-## Cấu Trúc Project
+## Project Structure
 
 ```
 weather-monitoring-system/
-├── README.md                  # Tổng quan hệ thống (Tiếng Anh)
-├── README.vi.md                # Tổng quan hệ thống (file này, Tiếng Việt)
-├── firmware/                    # Firmware ESP32 + DHT11 (PlatformIO)
+├── README.md                  # System overview (this file, English)
+├── README.vi.md                # System overview (Vietnamese)
+├── firmware/                    # ESP32 + DHT11 firmware (PlatformIO)
 │   ├── src/
 │   │   └── main.cpp
 │   ├── include/
 │   ├── lib/
 │   ├── platformio.ini
 │   ├── secrets.example.h
-│   └── README.md                # Hướng dẫn build/flash firmware
-├── weatherProject/                # Backend Django + web dashboard
-│   ├── forecast/                    # App chính: views, API endpoint, logic mô hình
-│   ├── models/                       # Mô hình Random Forest đã train (.pkl)
+│   └── README.md                # Firmware build/flash instructions
+├── weatherProject/                # Django backend + web dashboard
+│   ├── forecast/                    # Main app: views, API endpoint, model logic
+│   ├── models/                       # Trained Random Forest models (.pkl)
 │   ├── templates/
 │   │   └── weather.html
 │   ├── manage.py
-│   └── README.md                    # Hướng dẫn chạy backend
-└── images/                          # Hình ảnh phần cứng và screenshot dashboard
+│   └── README.md                    # Backend setup instructions
+└── images/                          # Hardware images and dashboard screenshots
     ├── hardware_overview.png
     ├── web_interface1.png
     └── web_interface2.png
 ```
 
-> Điều chỉnh lại cấu trúc trên cho khớp với repo thực tế nếu có khác biệt.
+## Getting Started
 
-## Bắt Đầu
+1. Go to `firmware/README.md` to build and flash the firmware onto the ESP32, and wire the DHT11 according to the hardware image above.
+2. Go to `weatherProject/README.md` to install dependencies, configure your OpenWeather API key, and run the Django server.
+3. Power on the ESP32 — it will start sending sensor readings to the Django backend.
+4. Open the dashboard in your browser to view current weather and the 24-hour forecast.
 
-1. Vào `firmware/README.md` để build và flash firmware lên ESP32, đấu nối DHT11 theo hình ảnh phần cứng ở trên.
-2. Vào `weatherProject/README.md` để cài dependencies, cấu hình OpenWeather API key, và chạy Django server.
-3. Cấp nguồn cho ESP32 — thiết bị sẽ bắt đầu gửi dữ liệu cảm biến lên Django backend.
-4. Mở dashboard trên trình duyệt để xem thời tiết hiện tại và dự báo 24 giờ.
+## License
 
-## Giấy Phép
-
-MIT License (hoặc cập nhật theo lựa chọn của bạn)
+MIT License (or update according to your preference)
