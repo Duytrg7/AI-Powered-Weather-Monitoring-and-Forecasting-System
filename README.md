@@ -175,9 +175,9 @@ weather-monitoring-system/
 │   ├── manage.py
 │   └── README.md                    # Hướng dẫn chạy backend
 └── images/                          # Hình ảnh phần cứng và screenshot dashboard
-    ├── hardware_overview.jpg
-    ├── web_interface1.jpg
-    └── web_interface2.jpg
+    ├── hardware_overview.png
+    ├── web_interface1.png
+    └── web_interface2.png
 ```
 
 > Điều chỉnh lại cấu trúc trên cho khớp với repo thực tế nếu có khác biệt.
