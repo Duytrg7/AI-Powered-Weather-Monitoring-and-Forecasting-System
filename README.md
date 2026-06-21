@@ -47,7 +47,7 @@ flowchart TB
 ## Hình Ảnh Phần Cứng
 
 <p align="center">
-  <img src="images/hardware_overview.jpg" alt="Sơ đồ đi dây ESP32 và DHT11" width="600">
+  <img src="images/hardware_overview.png" alt="Sơ đồ đi dây ESP32 và DHT11" width="600">
 </p>
 
 Sơ đồ đi dây ESP32 và DHT11.
