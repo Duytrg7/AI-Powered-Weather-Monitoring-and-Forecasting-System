@@ -42,8 +42,8 @@ def receive_sensor_data(request):
             if temperature is None or humidity is None:
                 return JsonResponse({'status': 'error', 'message': 'Thiếu temperature hoặc humidity'}, status=400)
 
-            cache.set('dht11_temperature', float(temperature), timeout=600)
-            cache.set('dht11_humidity', float(humidity), timeout=600)
+            cache.set('dht11_temperature', float(temperature), timeout=30)
+            cache.set('dht11_humidity', float(humidity), timeout=30)
 
             print(
                 f"[ESP32] Nhận được: Nhiệt độ={temperature}°C, Độ ẩm={humidity}%")
