@@ -153,7 +153,7 @@ Measured on the implemented system:
 - ESP32 Dev Board
 - DHT11 Temperature & Humidity Sensor
 
-## Project Structure
+## Overall Project Structure
 
 ```
 weather-monitoring-system/
@@ -161,11 +161,11 @@ weather-monitoring-system/
 ├── README.vi.md                     # System overview (Vietnamese)
 ├── firmware/                        # ESP32 + DHT11 firmware (PlatformIO)
 │   ├── src/
-│   │   └── main.cpp
+│   │   ├── main.cpp
 │   │   └── secrets.example.h
 │   ├── include/
 │   ├── lib/
-│   ├── platformio.ini
+│   └── platformio.ini
 ├── weatherProject/                  # Django backend + web dashboard
 │   ├── forecast/                    # Main app: views, API endpoint, model logic
 │   ├── models/                      # Trained Random Forest models (.pkl)
