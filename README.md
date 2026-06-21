@@ -185,10 +185,4 @@ weather-monitoring-system/
 ...
 ```
 
-## Getting Started
-
-1. Go to `firmware/README.md` to build and flash the firmware onto the ESP32, and wire the DHT11 according to the hardware image above.
-2. Go to `weatherProject/README.md` to install dependencies, configure your OpenWeather API key, and run the Django server.
-3. Power on the ESP32 — it will start sending sensor readings to the Django backend.
-4. Open the dashboard in your browser to view current weather and the 24-hour forecast.
 
