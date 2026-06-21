@@ -56,13 +56,13 @@ ESP32 and DHT11 wiring overview.
 
 ## Web Dashboard
 
-<img src="images/web_interface2.png" alt="Dashboard - Sensor Data Source" width="500">
-
 Dashboard showing current weather data sourced from the DHT11 sensor via ESP32, along with the 24-hour temperature and humidity forecast.
 
-<img src="images/web_interface1.png" alt="Dashboard - API Data Source" width="500">
+<img src="images/web_interface2.png" alt="Dashboard - Sensor Data Source" width="500">
 
 Dashboard falling back to the OpenWeather API when sensor data is unavailable or expired, indicating the active data source to the user.
+
+<img src="images/web_interface1.png" alt="Dashboard - API Data Source" width="500">
 
 ---
 
@@ -157,27 +157,32 @@ Measured on the implemented system:
 
 ```
 weather-monitoring-system/
-├── README.md                  # System overview (this file, English)
-├── README.vi.md                # System overview (Vietnamese)
-├── firmware/                    # ESP32 + DHT11 firmware (PlatformIO)
+├── README.md                        # System overview (this file, English)
+├── README.vi.md                     # System overview (Vietnamese)
+├── firmware/                        # ESP32 + DHT11 firmware (PlatformIO)
 │   ├── src/
 │   │   └── main.cpp
+│   │   └── secrets.example.h
 │   ├── include/
 │   ├── lib/
 │   ├── platformio.ini
-│   ├── secrets.example.h
-│   └── README.md                # Firmware build/flash instructions
-├── weatherProject/                # Django backend + web dashboard
+├── weatherProject/                  # Django backend + web dashboard
 │   ├── forecast/                    # Main app: views, API endpoint, model logic
-│   ├── models/                       # Trained Random Forest models (.pkl)
+│   ├── models/                      # Trained Random Forest models (.pkl)
 │   ├── templates/
 │   │   └── weather.html
-│   ├── manage.py
-│   └── README.md                    # Backend setup instructions
+│   ├── static/
+│   │   └── css
+│   │       └── styles.css           # Modify UI
+│   │   └── img                      # Background images for web interface
+│   │   └── js                       # Setup chart logic
+│   │       └── chartSetup.js  
+│   └── manage.py
 └── images/                          # Hardware images and dashboard screenshots
     ├── hardware_overview.png
     ├── web_interface1.png
     └── web_interface2.png
+...
 ```
 
 ## Getting Started
@@ -187,6 +192,3 @@ weather-monitoring-system/
 3. Power on the ESP32 — it will start sending sensor readings to the Django backend.
 4. Open the dashboard in your browser to view current weather and the 24-hour forecast.
 
-## License
-
-MIT License (or update according to your preference)
